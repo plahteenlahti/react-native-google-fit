@@ -11,13 +11,12 @@
 package com.reactnative.googlefit;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
-import java.util.ArrayList;
-import android.content.Intent;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
+import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
@@ -25,12 +24,13 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.WritableArray;
+import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.HealthDataTypes;
-import com.facebook.react.bridge.WritableMap;
+import java.util.ArrayList;
+
 
 
 public class GoogleFitModule extends ReactContextBaseJavaModule implements LifecycleEventListener {
@@ -159,6 +159,20 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
             errorCallback.invoke(e.getMessage());
         }
     }
+
+    @ReactMethod
+    public void getSleepSamples(double startDate,
+                                   double endDate,
+                                   Callback errorCallback,
+                                   Callback successCallback) {
+
+        try {
+            successCallback.invoke(mGoogleFitManager.getActivityHistory().getSleepSamples((long)startDate, (long)endDate));
+        } catch (IllegalViewOperationException e) {
+            errorCallback.invoke(e.getMessage());
+        }
+    }
+
 
     @ReactMethod
     public void getDailyDistanceSamples(double startDate,

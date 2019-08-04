@@ -14,7 +14,6 @@ package com.reactnative.googlefit;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
-
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReadableArray;
@@ -25,27 +24,28 @@ import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.data.Bucket;
 import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
-import com.google.android.gms.fitness.data.DataType;
-import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.data.DataSource;
-import com.google.android.gms.fitness.request.DataSourcesRequest;
+import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Device;
+import com.google.android.gms.fitness.data.Device.TYPE_WATCH;
+import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
+import com.google.android.gms.fitness.request.DataSourcesRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.fitness.result.DataSourcesResult;
-import com.google.android.gms.fitness.data.Device;
-
 import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
-import java.text.SimpleDateFormat;
 import java.util.TimeZone;
-import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+
 
 
 import static com.google.android.gms.fitness.data.Device.TYPE_WATCH;
@@ -144,4 +144,77 @@ public class ActivityHistory {
         
         return results;
     }
+
+
+    public ReadableArray getSleepSamples(long startTime, long endTime) {
+        WritableArray results = Arguments.createArray();
+        DataReadRequest readRequest = new DataReadRequest.Builder()
+                .aggregate(DataType.TYPE_STEP_COUNT_DELTA, DataType.AGGREGATE_STEP_COUNT_DELTA)
+                .aggregate(DataType.TYPE_CALORIES_EXPENDED, DataType.AGGREGATE_CALORIES_EXPENDED)
+                .aggregate(DataType.TYPE_DISTANCE_DELTA, DataType.AGGREGATE_DISTANCE_DELTA)
+                .bucketByActivitySegment(1, TimeUnit.SECONDS)
+                .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+                .build();
+
+        DataReadResult dataReadResult = Fitness.HistoryApi.readData(googleFitManager.getGoogleApiClient(), readRequest).await(1, TimeUnit.MINUTES);
+
+        List<Bucket> buckets = dataReadResult.getBuckets();
+        for (Bucket bucket : buckets) {
+            String activityName = bucket.getActivity();
+            int activityType = bucket.getBucketType();
+            if (!bucket.getDataSets().isEmpty()) {
+                long start = bucket.getStartTime(TimeUnit.MILLISECONDS);
+                long end = bucket.getEndTime(TimeUnit.MILLISECONDS);
+                Date startDate = new Date(start);
+                Date endDate = new Date(end);
+                WritableMap map = Arguments.createMap();
+                map.putDouble("start",start);
+                map.putDouble("end",end);
+                map.putString("activityName", activityName);
+                String deviceName = "";
+                String sourceId = "";
+                boolean isTracked = true;
+                for (DataSet dataSet : bucket.getDataSets()) {
+                    for (DataPoint dataPoint : dataSet.getDataPoints()) {
+                        try {
+                            int deviceType = dataPoint.getOriginalDataSource().getDevice().getType();
+                            if (deviceType == TYPE_WATCH) {
+                                deviceName = "Android Wear";
+                            } else {
+                                deviceName = "Android";
+                            }
+                        } catch (Exception e) {
+                        }
+                        sourceId = dataPoint.getOriginalDataSource().getAppPackageName();
+                        if (startDate.getTime() % 1000 == 0 && endDate.getTime() % 1000 == 0) {
+                            isTracked = false;
+                        }
+                        for (Field field : dataPoint.getDataType().getFields()) {
+                            String fieldName = field.getName();
+                            switch (fieldName) {
+                                case STEPS_FIELD_NAME:
+                                    map.putInt("quantity", dataPoint.getValue(field).asInt());
+                                    break;
+                                case DISTANCE_FIELD_NAME:
+                                    map.putDouble(fieldName, dataPoint.getValue(field).asFloat());
+                                    break;
+                                case CALORIES_FIELD_NAME:
+                                    map.putDouble(fieldName, dataPoint.getValue(field).asFloat());
+                                default:
+                                    Log.w(TAG, "don't specified and handled: " + fieldName);
+                            }
+                        }
+                    }
+                }
+                map.putString("device", deviceName);
+                map.putString("sourceName", deviceName);
+                map.putString("sourceId", sourceId);
+                map.putBoolean("tracked", isTracked);
+                results.pushMap(map);
+            }
+        }
+        
+        return results;
+    }   
+
 }
