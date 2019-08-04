@@ -205,6 +205,23 @@ class RNGoogleFit {
 		);
 	}
 
+	getSleepSamples(options, callback) {
+		googleFit.getSleepSamples(
+			options.startDate,
+			options.endDate,
+			(error) => {
+				callback(error, false);
+			},
+			(res) => {
+				if (res.length > 0) {
+					callback(false, res);
+				} else {
+					callback('Could not find anything for this time period', false);
+				}
+			}
+		);
+	}
+
 	/**
 	 * Get the total calories per day over a specified date range.
 	 * @param {Object} options getDailyCalorieSamples accepts an options object containing:
