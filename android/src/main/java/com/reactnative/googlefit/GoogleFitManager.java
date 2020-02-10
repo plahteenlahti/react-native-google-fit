@@ -12,10 +12,8 @@ package com.reactnative.googlefit;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.IntentSender;
-import android.os.Bundle;
+import androidx.annotation.Nullable;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -183,10 +181,17 @@ public class GoogleFitManager implements
         mApiClient.connect();
     }
 
-    public void  disconnect() {
+    public void  disconnect(Context context) {
+        GoogleSignInOptions options = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(context, options);
+
         GoogleSignInAccount gsa = GoogleSignIn.getAccountForScopes(mReactContext, new Scope(Scopes.FITNESS_ACTIVITY_READ));
         Fitness.getConfigClient(mReactContext, gsa).disableFit();
         mApiClient.disconnect();
+
+        googleSignInClient.signOut();
     }
 
     public boolean isAuthorized() {
