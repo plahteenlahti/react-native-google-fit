@@ -12,6 +12,8 @@ package com.reactnative.googlefit;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
 import androidx.annotation.Nullable;
 import android.util.Log;
