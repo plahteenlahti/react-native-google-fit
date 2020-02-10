@@ -178,6 +178,22 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
         }
     }
 
+
+    @ReactMethod
+    public void getSleepSamples(double startDate,
+                                  double endDate,
+                                  Callback errorCallback,
+                                  Callback successCallback) {
+
+        try {
+            mGoogleFitManager.getActivityHistory().getSleepSamples((long) startDate, (long) endDate, successCallback);
+        } catch (IllegalViewOperationException e) {
+            errorCallback.invoke(e.getMessage());
+        }
+    }
+
+
+
     @ReactMethod
     public void getDailyDistanceSamples(double startDate,
                                         double endDate,
@@ -380,6 +396,31 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
             HeartrateHistory heartrateHistory = mGoogleFitManager.getHeartrateHistory();
             heartrateHistory.setDataType(DataType.TYPE_HEART_RATE_BPM);
             successCallback.invoke(heartrateHistory.getHistory((long)startDate, (long)endDate));
+        } catch (IllegalViewOperationException e) {
+            errorCallback.invoke(e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void saveSleep(ReadableMap sleepSample,
+                           Callback errorCallback,
+                           Callback successCallback) {
+
+        try {
+            BodyHistory bodyHistory = mGoogleFitManager.getBodyHistory();
+            bodyHistory.setDataType(DataType.TYPE_WEIGHT);
+            successCallback.invoke(bodyHistory.save(weightSample));
+        } catch (IllegalViewOperationException e) {
+            errorCallback.invoke(e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void deleteWeight(ReadableMap options, Callback errorCallback, Callback successCallback) {
+        try {
+            BodyHistory bodyHistory = mGoogleFitManager.getBodyHistory();
+            bodyHistory.setDataType(DataType.TYPE_WEIGHT);
+            successCallback.invoke(bodyHistory.delete(options));
         } catch (IllegalViewOperationException e) {
             errorCallback.invoke(e.getMessage());
         }
