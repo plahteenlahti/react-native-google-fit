@@ -1,4 +1,8 @@
 // tslint:disable:no-default-export interface-name
+
+type getSleepSamplesOptions  {
+  
+}
 declare module 'react-native-google-fit' {
   export interface GoogleFit {
     eventListeners: any[]
@@ -23,6 +27,12 @@ declare module 'react-native-google-fit' {
     getSteps(dayStart: Date | string, dayEnd: Date | string): any
 
     getWeeklySteps(startDate: Date | string): any
+
+
+    
+
+    getSleepSamples(startDate: Date | string,callback: (param: any) => void): any
+
 
     /**
      * Get the total steps per day over a specified date range.
