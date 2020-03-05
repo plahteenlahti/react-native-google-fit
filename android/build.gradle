@@ -1,7 +1,5 @@
 buildscript {
 
-    if (project == rootProject) {
-
         repositories {
             google()
             mavenLocal()
@@ -10,9 +8,9 @@ buildscript {
         }
 
         dependencies {
-            classpath("com.android.tools.build:gradle:3.5.3")
+            classpath("com.android.tools.build:gradle:3.4.1")
         }
-    }
+
 }
 
 apply plugin: 'com.android.library'

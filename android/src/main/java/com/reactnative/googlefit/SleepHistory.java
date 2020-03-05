@@ -39,36 +39,41 @@ import com.google.android.gms.fitness.result.SessionReadResult;
 
 public class SleepHistory {
 
+    private ReactContext mReactContext;
     private GoogleFitManager googleFitManager;
-
+    
     private static final String TAG = "RNGoogleFit";
+
+    public SleepHistory(ReactContext reactContext, GoogleFitManager googleFitManager) {
+        this.mReactContext = reactContext;
+        this.googleFitManager = googleFitManager;
+    }
 
     public ReadableArray getSleepSamples(long startTime, long endTime) {
         WritableArray results = Arguments.createArray();
 
         SessionReadRequest.Builder sessionBuilder = new SessionReadRequest.Builder()
-                .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
-                .read(DataType.TYPE_ACTIVITY_SEGMENT)
-                .readSessionsFromAllApps()
-                .enableServerQueries();
+                .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS).read(DataType.TYPE_ACTIVITY_SEGMENT)
+                .readSessionsFromAllApps().enableServerQueries();
 
         SessionReadRequest readRequest = sessionBuilder.build();
 
-        SessionReadResult sessionReadResult = Fitness.SessionsApi.readSession(googleFitManager.getGoogleApiClient(), readRequest).await(120, TimeUnit.SECONDS);
+        SessionReadResult sessionReadResult = Fitness.SessionsApi
+                .readSession(googleFitManager.getGoogleApiClient(), readRequest).await(120, TimeUnit.SECONDS);
 
         List<Session> sessions = sessionReadResult.getSessions();
         for (Session session : sessions) {
 
-                long start = session.getStartTime(TimeUnit.MILLISECONDS);
-                long end = session.getEndTime(TimeUnit.MILLISECONDS);
+            long start = session.getStartTime(TimeUnit.MILLISECONDS);
+            long end = session.getEndTime(TimeUnit.MILLISECONDS);
 
-                WritableMap map = Arguments.createMap();
-                map.putDouble("start",start);
-                map.putDouble("end",end);
-                map.putString("name", session.getName());
-                map.putString("description", session.getDescription());
-                map.putString("sourceId", session.getAppPackageName());
-                results.pushMap(map);
+            WritableMap map = Arguments.createMap();
+            map.putDouble("start", start);
+            map.putDouble("end", end);
+            map.putString("name", session.getName());
+            map.putString("description", session.getDescription());
+            map.putString("sourceId", session.getAppPackageName());
+            results.pushMap(map);
         }
 
         return results;

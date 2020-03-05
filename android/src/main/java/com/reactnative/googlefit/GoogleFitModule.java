@@ -23,7 +23,6 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.IllegalViewOperationException;
 import com.google.android.gms.fitness.data.DataType;
@@ -185,7 +184,7 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
                                   Callback successCallback) {
 
         try {
-            successCallback.invoke(mGoogleFitManager.getSleepHistory().getSleepSamples((long) startDate, (long) endDate, successCallback));
+            successCallback.invoke(mGoogleFitManager.getSleepHistory().getSleepSamples((long) startDate, (long) endDate));
         } catch (IllegalViewOperationException e) {
             errorCallback.invoke(e.getMessage());
         }
