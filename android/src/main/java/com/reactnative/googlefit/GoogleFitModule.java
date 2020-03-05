@@ -409,7 +409,7 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
         try {
             BodyHistory bodyHistory = mGoogleFitManager.getBodyHistory();
             bodyHistory.setDataType(DataType.TYPE_WEIGHT);
-            successCallback.invoke(bodyHistory.save(weightSample));
+            successCallback.invoke(bodyHistory.save(sleepSample));
         } catch (IllegalViewOperationException e) {
             errorCallback.invoke(e.getMessage());
         }
