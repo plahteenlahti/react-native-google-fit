@@ -186,7 +186,7 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
                                   Callback successCallback) {
 
         try {
-            mGoogleFitManager.getActivityHistory().getSleepSamples((long) startDate, (long) endDate, successCallback);
+            successCallback.invoke(mGoogleFitManager.getActivityHistory().getSleepSamples((long) startDate, (long) endDate, successCallback));
         } catch (IllegalViewOperationException e) {
             errorCallback.invoke(e.getMessage());
         }
@@ -415,14 +415,4 @@ public class GoogleFitModule extends ReactContextBaseJavaModule implements Lifec
         }
     }
 
-    @ReactMethod
-    public void deleteWeight(ReadableMap options, Callback errorCallback, Callback successCallback) {
-        try {
-            BodyHistory bodyHistory = mGoogleFitManager.getBodyHistory();
-            bodyHistory.setDataType(DataType.TYPE_WEIGHT);
-            successCallback.invoke(bodyHistory.delete(options));
-        } catch (IllegalViewOperationException e) {
-            errorCallback.invoke(e.getMessage());
-        }
-    }
 }
