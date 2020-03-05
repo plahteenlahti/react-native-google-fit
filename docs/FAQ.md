@@ -29,7 +29,7 @@ const options = {
     Scopes.FITNESS_ACTIVITY_READ_WRITE,
     Scopes.FITNESS_BODY_READ_WRITE,
   ],
-}
+};
 GoogleFit.authorize(options)
  .then(() => {
    dispatch('AUTH_SUCCESS')

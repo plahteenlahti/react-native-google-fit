@@ -303,6 +303,6 @@ declare module 'react-native-google-fit' {
     FITNESS_REPRODUCTIVE_HEALTH_READ_WRITE = 'https://www.googleapis.com/auth/fitness.reproductive_health.write',
   }
 
-  const googleFit: GoogleFit
+  const googleFit: GoogleFit;
   export default googleFit
 }

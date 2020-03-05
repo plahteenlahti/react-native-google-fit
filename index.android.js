@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 import { DeviceEventEmitter, NativeModules } from 'react-native'
 
 import PossibleScopes from './src/scopes'
@@ -11,61 +11,61 @@ import {
   prepareResponse,
 } from './src/utils'
 
-const googleFit = NativeModules.RNGoogleFit
+const googleFit = NativeModules.RNGoogleFit;
 
 class RNGoogleFit {
-  eventListeners = []
-  isAuthorized = false
+  eventListeners = [];
+  isAuthorized = false;
 
   authorize = async (options = {}) => {
-    const successResponse = { success: true }
+    const successResponse = { success: true };
     try {
-      await this.checkIsAuthorized()
+      await this.checkIsAuthorized();
       if (this.isAuthorized) {
         return successResponse
       }
       const authResult = await new Promise((resolve, reject) => {
         this.onAuthorize(() => {
-          this.isAuthorized = true
+          this.isAuthorized = true;
           resolve(successResponse)
-        })
+        });
         this.onAuthorizeFailure(error => {
-          this.isAuthorized = false
+          this.isAuthorized = false;
           reject({ success: false, message: error.message })
-        })
+        });
 
         const defaultScopes = [
           Scopes.FITNESS_ACTIVITY_READ,
           Scopes.FITNESS_BODY_READ_WRITE,
           Scopes.FITNESS_LOCATION_READ,
-        ]
+        ];
 
         googleFit.authorize({
           scopes: (options && options.scopes) || defaultScopes,
         })
-      })
+      });
       return authResult
     } catch (error) {
       return { success: false, message: error.message }
     }
-  }
+  };
 
   checkIsAuthorized = async () => {
-    const { isAuthorized } = await googleFit.isAuthorized()
-    this.isAuthorized = isAuthorized
+    const { isAuthorized } = await googleFit.isAuthorized();
+    this.isAuthorized = isAuthorized;
     return isAuthorized
-  }
+  };
 
   disconnect = () => {
-    this.isAuthorized = false
-    googleFit.disconnect()
+    this.isAuthorized = false;
+    googleFit.disconnect();
     this.removeListeners()
-  }
+  };
 
   removeListeners = () => {
-    this.eventListeners.forEach(eventListener => eventListener.remove())
+    this.eventListeners.forEach(eventListener => eventListener.remove());
     this.eventListeners = []
-  }
+  };
 
   /**
    * Start recording fitness data
@@ -80,16 +80,16 @@ class RNGoogleFit {
    * and check for {recording: true} as the event data
    */
   startRecording = (callback, dataTypes = ['step', 'distance']) => {
-    googleFit.startFitnessRecording(dataTypes)
+    googleFit.startFitnessRecording(dataTypes);
 
     const eventListeners = dataTypes.map(dataTypeName => {
-      const eventName = `${dataTypeName.toUpperCase()}_RECORDING`
+      const eventName = `${dataTypeName.toUpperCase()}_RECORDING`;
 
       return DeviceEventEmitter.addListener(eventName, event => callback(event))
-    })
+    });
 
     this.eventListeners.push(...eventListeners)
-  }
+  };
 
   // Will be deprecated in future releases
   getSteps(dayStart, dayEnd) {
@@ -111,11 +111,11 @@ class RNGoogleFit {
           callback(
             false,
             res.map(function(dev) {
-              const obj = {}
+              const obj = {};
               obj.source =
                 dev.source.appPackage +
-                (dev.source.stream ? ':' + dev.source.stream : '')
-              obj.steps = buildDailySteps(dev.steps)
+                (dev.source.stream ? ':' + dev.source.stream : '');
+              obj.steps = buildDailySteps(dev.steps);
               return obj
             }, this)
           )
@@ -124,7 +124,7 @@ class RNGoogleFit {
         }
       }
     )
-  }
+  };
 
   /**
    * Get the total steps per day over a specified date range.
@@ -135,10 +135,10 @@ class RNGoogleFit {
   getDailyStepCountSamples = (options, callback) => {
     const startDate = !isNil(options.startDate)
       ? Date.parse(options.startDate)
-      : new Date().setHours(0, 0, 0, 0)
+      : new Date().setHours(0, 0, 0, 0);
     const endDate = !isNil(options.endDate)
       ? Date.parse(options.endDate)
-      : new Date().valueOf()
+      : new Date().valueOf();
     if (!callback || typeof callback !== 'function') {
       return new Promise((resolve, reject) => {
         this._retrieveDailyStepCountSamples(
@@ -155,7 +155,7 @@ class RNGoogleFit {
       })
     }
     this._retrieveDailyStepCountSamples(startDate, endDate, callback)
-  }
+  };
 
   /**
    * Get the total distance per day over a specified date range.
@@ -166,10 +166,10 @@ class RNGoogleFit {
   getDailyDistanceSamples(options, callback) {
     const startDate = !isNil(options.startDate)
       ? Date.parse(options.startDate)
-      : new Date().setHours(0, 0, 0, 0)
+      : new Date().setHours(0, 0, 0, 0);
     const endDate = !isNil(options.endDate)
       ? Date.parse(options.endDate)
-      : new Date().valueOf()
+      : new Date().valueOf();
     googleFit.getDailyDistanceSamples(
       startDate,
       endDate,
@@ -229,9 +229,9 @@ class RNGoogleFit {
    */
 
   getDailyCalorieSamples(options, callback) {
-    const basalCalculation = options.basalCalculation !== false
-    const startDate = Date.parse(options.startDate)
-    const endDate = Date.parse(options.endDate)
+    const basalCalculation = options.basalCalculation !== false;
+    const startDate = Date.parse(options.startDate);
+    const endDate = Date.parse(options.endDate);
     googleFit.getDailyCalorieSamples(
       startDate,
       endDate,
@@ -250,7 +250,7 @@ class RNGoogleFit {
   }
 
   saveFood(options, callback) {
-    options.date = Date.parse(options.date)
+    options.date = Date.parse(options.date);
     googleFit.saveFood(
       options,
       msg => {
@@ -272,10 +272,10 @@ class RNGoogleFit {
   getWeightSamples = (options, callback) => {
     const startDate = !isNil(options.startDate)
       ? Date.parse(options.startDate)
-      : new Date().setHours(0, 0, 0, 0)
+      : new Date().setHours(0, 0, 0, 0);
     const endDate = !isNil(options.endDate)
       ? Date.parse(options.endDate)
-      : new Date().valueOf()
+      : new Date().valueOf();
     googleFit.getWeightSamples(
       startDate,
       endDate,
@@ -289,22 +289,22 @@ class RNGoogleFit {
               if (options.unit === 'pound') {
                 el.value = KgToLbs(el.value) //convert back to pounds
               }
-              el.startDate = new Date(el.startDate).toISOString()
-              el.endDate = new Date(el.endDate).toISOString()
+              el.startDate = new Date(el.startDate).toISOString();
+              el.endDate = new Date(el.endDate).toISOString();
               return el
             }
-          })
+          });
           callback(false, res.filter(day => !isNil(day)))
         } else {
           callback('There is no any weight data for this period', false)
         }
       }
     )
-  }
+  };
 
   getHeightSamples(options, callback) {
-    const startDate = Date.parse(options.startDate)
-    const endDate = Date.parse(options.endDate)
+    const startDate = Date.parse(options.startDate);
+    const endDate = Date.parse(options.endDate);
     googleFit.getHeightSamples(
       startDate,
       endDate,
@@ -322,7 +322,7 @@ class RNGoogleFit {
   }
 
   saveHeight(options, callback) {
-    options.date = Date.parse(options.date)
+    options.date = Date.parse(options.date);
     googleFit.saveHeight(
       options,
       msg => {
@@ -338,7 +338,7 @@ class RNGoogleFit {
     if (options.unit == 'pound') {
       options.value = lbsAndOzToK({ pounds: options.value, ounces: 0 }) //convert pounds and ounces to kg
     }
-    options.date = Date.parse(options.date)
+    options.date = Date.parse(options.date);
     googleFit.saveWeight(
       options,
       msg => {
@@ -354,7 +354,7 @@ class RNGoogleFit {
     if (options.unit === 'pound') {
       options.value = lbsAndOzToK({ pounds: options.value, ounces: 0 }) //convert pounds and ounces to kg
     }
-    options.date = Date.parse(options.date)
+    options.date = Date.parse(options.date);
     googleFit.deleteWeight(
       options,
       msg => {
@@ -364,10 +364,10 @@ class RNGoogleFit {
         callback(false, res)
       }
     )
-  }
+  };
 
   deleteHeight = (options, callback) => {
-    options.date = Date.parse(options.date)
+    options.date = Date.parse(options.date);
     googleFit.deleteWeight(
       options,
       msg => {
@@ -377,7 +377,7 @@ class RNGoogleFit {
         callback(false, res)
       }
     )
-  }
+  };
 
   isAvailable(callback) {
     // true if GoogleFit installed
@@ -411,42 +411,42 @@ class RNGoogleFit {
     const stepsObserver = DeviceEventEmitter.addListener(
       'StepChangedEvent',
       steps => callback(steps)
-    )
-    googleFit.observeSteps()
+    );
+    googleFit.observeSteps();
     this.eventListeners.push(stepsObserver)
-  }
+  };
 
   observeHistory = callback => {
     const historyObserver = DeviceEventEmitter.addListener(
       'StepHistoryChangedEvent',
       steps => callback(steps)
-    )
+    );
     this.eventListeners.push(historyObserver)
-  }
+  };
 
   onAuthorize = callback => {
     const authObserver = DeviceEventEmitter.addListener(
       'GoogleFitAuthorizeSuccess',
       authorized => callback(authorized)
-    )
+    );
     this.eventListeners.push(authObserver)
-  }
+  };
 
   onAuthorizeFailure = callback => {
     const authFailedObserver = DeviceEventEmitter.addListener(
       'GoogleFitAuthorizeFailure',
       authorized => callback(authorized)
-    )
+    );
     this.eventListeners.push(authFailedObserver)
-  }
+  };
 
   unsubscribeListeners = () => {
     this.removeListeners()
-  }
+  };
 
   getHeartRateSamples(options, callback) {
-    const startDate = Date.parse(options.startDate)
-    const endDate = Date.parse(options.endDate)
+    const startDate = Date.parse(options.startDate);
+    const endDate = Date.parse(options.endDate);
     googleFit.getHeartRateSamples(
       startDate,
       endDate,
@@ -464,8 +464,8 @@ class RNGoogleFit {
   }
 
   getBloodPressureSamples(options, callback) {
-    const startDate = Date.parse(options.startDate)
-    const endDate = Date.parse(options.endDate)
+    const startDate = Date.parse(options.startDate);
+    const endDate = Date.parse(options.endDate);
     googleFit.getBloodPressureSamples(
       startDate,
       endDate,
@@ -486,7 +486,7 @@ class RNGoogleFit {
 export default new RNGoogleFit()
 
 // Possible Scopes
-export const Scopes = Object.freeze(PossibleScopes)
+export const Scopes = Object.freeze(PossibleScopes);
 
 //Data types for food addition
 export const MealType = Object.freeze({
@@ -495,7 +495,7 @@ export const MealType = Object.freeze({
   LUNCH: 2,
   DINNER: 3,
   SNACK: 4,
-})
+});
 
 export const Nutrient = Object.freeze({
   /**
@@ -588,7 +588,7 @@ export const Nutrient = Object.freeze({
    * @type {string}
    */
   IRON: 'iron',
-})
+});
 
 /*
 TODO: Add food example to readme

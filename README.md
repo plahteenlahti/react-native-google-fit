@@ -24,7 +24,7 @@ A React Native bridge module for interacting with Google Fit
         Scopes.FITNESS_ACTIVITY_READ_WRITE,
         Scopes.FITNESS_BODY_READ_WRITE,
       ],
-    }
+    };
     GoogleFit.authorize(options)
       .then(authResult => {
         if (authResult.success) {
@@ -35,7 +35,7 @@ A React Native bridge module for interacting with Google Fit
       })
       .catch(() => {
         dispatch("AUTH_ERROR");
-      })
+      });
     
     // ...
     // Call when authorized
@@ -48,7 +48,7 @@ A React Native bridge module for interacting with Google Fit
     ```javascript
      GoogleFit.onAuthorize(() => {
        dispatch('AUTH SUCCESS')
-     })
+     });
          
      GoogleFit.onAuthorizeFailure(() => {
        dispatch('AUTH ERROR')
@@ -175,12 +175,12 @@ A React Native bridge module for interacting with Google Fit
     const options = {
       startDate: "2017-01-01T00:00:17.971Z", // required
       endDate: new Date().toISOString(), // required
-    }
+    };
     const callback = ((error, response) => {
       console.log(error, response)
     });
 
-    GoogleFit.getHeartRateSamples(options, callback)
+    GoogleFit.getHeartRateSamples(options, callback);
     GoogleFit.getBloodPressureSamples(options, callback)
     ```
 

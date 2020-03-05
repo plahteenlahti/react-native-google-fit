@@ -8,7 +8,6 @@
  * Based on Asim Malik android source code, copyright (c) 2015
  *
  **/
-package com.reactnative.googlefit;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -60,6 +59,7 @@ public class GoogleFitManager implements
     private StepSensor stepSensor;
     private RecordingApi recordingApi;
     private ActivityHistory activityHistory;
+    private SleepHistory sleepHistory
 
     private static final String TAG = "RNGoogleFit";
 
@@ -80,6 +80,7 @@ public class GoogleFitManager implements
         this.nutritionHistory = new NutritionHistory(mReactContext, this);
         this.recordingApi = new RecordingApi(mReactContext, this);
         this.activityHistory = new ActivityHistory(mReactContext, this);
+        this.sleepHistory = new SleepHistory(mReactContext, this)
         //        this.stepSensor = new StepSensor(mReactContext, activity);
     }
 
@@ -198,11 +199,7 @@ public class GoogleFitManager implements
     }
 
     public boolean isAuthorized() {
-        if (mApiClient != null && mApiClient.isConnected()) {
-            return true;
-        } else {
-            return false;
-        }
+        return mApiClient != null && mApiClient.isConnected();
     }
 
     protected void stop() {
@@ -257,6 +254,14 @@ public class GoogleFitManager implements
         this.activityHistory = activityHistory;
     }
 
+
+    public SleepHistory getSleepHistory() {
+        return sleepHistory;
+    }
+
+    public void setActivityHistory(SleepHistory sleepHistory) {
+        this.sleepHistory = sleepHistory;
+    }
     public static class GoogleFitCustomErrorDialig extends ErrorDialogFragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {

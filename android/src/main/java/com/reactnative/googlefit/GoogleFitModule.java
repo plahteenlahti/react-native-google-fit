@@ -8,8 +8,6 @@
  * Based on Asim Malik android source code, copyright (c) 2015
  **/
 
-package com.reactnative.googlefit;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;

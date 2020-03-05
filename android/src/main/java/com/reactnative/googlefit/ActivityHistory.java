@@ -9,9 +9,9 @@
  *
  **/
 
-package com.reactnative.googlefit;
+package com.reactnative.googlefit
 
-import android.text.TextUtils;
+
 import android.util.Log;
 import androidx.annotation.Nullable;
 import com.facebook.react.bridge.Arguments;
@@ -34,16 +34,9 @@ import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.request.DataSourcesRequest;
 import com.google.android.gms.fitness.result.DataReadResult;
 import com.google.android.gms.fitness.result.DataSourcesResult;
-import java.text.DateFormat;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
+
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import static com.google.android.gms.fitness.data.Device.TYPE_WATCH;
 import com.google.android.gms.fitness.request.SessionReadRequest;
@@ -141,38 +134,6 @@ public class ActivityHistory {
             }
         }
         
-        return results;
-    }
-
-
-    public ReadableArray getSleepSamples(long startTime, long endTime) {
-        WritableArray results = Arguments.createArray();
-
-        SessionReadRequest.Builder sessionBuilder = new SessionReadRequest.Builder()
-                .setTimeInterval(startTime, endTime, TimeUnit.MILLISECONDS)
-                .read(DataType.TYPE_ACTIVITY_SEGMENT)
-                .readSessionsFromAllApps()
-                .enableServerQueries();
-
-        SessionReadRequest readRequest = sessionBuilder.build();
-
-        SessionReadResult sessionReadResult = Fitness.SessionsApi.readSession(googleFitManager.getGoogleApiClient(), readRequest).await(120, TimeUnit.SECONDS);
-
-        List<Session> sessions = sessionReadResult.getSessions();
-        for (Session session : sessions) {
-
-                long start = session.getStartTime(TimeUnit.MILLISECONDS);
-                long end = session.getEndTime(TimeUnit.MILLISECONDS);
-
-                WritableMap map = Arguments.createMap();
-                map.putDouble("start",start);
-                map.putDouble("end",end);
-                map.putString("name", session.getName());
-                map.putString("description", session.getDescription());
-                map.putString("sourceId", session.getAppPackageName());
-                results.pushMap(map);
-        }
-
         return results;
     }
 

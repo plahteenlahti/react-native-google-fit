@@ -9,8 +9,6 @@
  *
  **/
 
-package com.reactnative.googlefit;
-
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -24,7 +22,7 @@ public class GoogleFitPackage implements ReactPackage {
     public static String PACKAGE_NAME;
 
     public GoogleFitPackage(String PACKAGE_NAME) {
-        this.PACKAGE_NAME = PACKAGE_NAME;
+        GoogleFitPackage.PACKAGE_NAME = PACKAGE_NAME;
     }
 
     @Override

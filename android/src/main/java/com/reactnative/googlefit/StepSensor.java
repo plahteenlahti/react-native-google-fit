@@ -9,8 +9,6 @@
  *
  **/
 
-package com.reactnative.googlefit;
-
 
 import android.app.Activity;
 import android.content.pm.PackageManager;

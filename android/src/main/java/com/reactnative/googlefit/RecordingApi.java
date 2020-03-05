@@ -9,8 +9,6 @@
  *
  **/
 
-package com.reactnative.googlefit;
-
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +26,7 @@ import com.google.android.gms.fitness.FitnessStatusCodes;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Subscription;
 import com.google.android.gms.fitness.result.ListSubscriptionsResult;
-import com.reactnative.googlefit.GoogleFitManager;
+
 import java.util.ArrayList;
 
 

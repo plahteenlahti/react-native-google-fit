@@ -7,8 +7,6 @@
  *
  **/
 
-package com.reactnative.googlefit;
-
 import android.os.AsyncTask;
 import android.util.Log;
 
