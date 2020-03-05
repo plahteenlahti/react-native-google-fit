@@ -8,6 +8,7 @@
  * Based on Asim Malik android source code, copyright (c) 2015
  *
  **/
+package com.reactnative.googlefit;
 
 import android.util.Log;
 import androidx.annotation.Nullable;

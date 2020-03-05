@@ -9,7 +9,7 @@
  *
  **/
 
-package com.reactnative.googlefit
+package com.reactnative.googlefit;
 
 
 import android.util.Log;

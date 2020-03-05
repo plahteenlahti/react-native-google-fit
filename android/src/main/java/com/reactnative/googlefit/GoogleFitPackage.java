@@ -8,6 +8,7 @@
  * Based on Asim Malik's android source code, copyright (c) 2015
  *
  **/
+package com.reactnative.googlefit;
 
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;

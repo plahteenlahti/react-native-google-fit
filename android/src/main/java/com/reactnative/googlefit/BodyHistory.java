@@ -6,6 +6,7 @@
  * LICENSE file in the root directory of this source tree.
  *
  **/
+package com.reactnative.googlefit;
 
 import android.os.AsyncTask;
 import android.util.Log;

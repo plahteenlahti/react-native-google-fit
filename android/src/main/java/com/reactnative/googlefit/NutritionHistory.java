@@ -1,3 +1,6 @@
+package com.reactnative.googlefit;
+
+
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;

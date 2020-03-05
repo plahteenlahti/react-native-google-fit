@@ -1,3 +1,6 @@
+package com.reactnative.googlefit;
+
+
 import android.text.TextUtils;
 import android.util.Log;
 import androidx.annotation.Nullable;
