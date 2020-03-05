@@ -1,13 +1,17 @@
 buildscript {
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-        jcenter()
-    }
 
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.1'
+    if (project == rootProject) {
+
+        repositories {
+            google()
+            mavenLocal()
+            mavenCentral()
+            jcenter()
+        }
+
+        dependencies {
+            classpath("com.android.tools.build:gradle:3.5.3")
+        }
     }
 }
 
@@ -19,6 +23,7 @@ def safeExtGet(prop, fallback) {
 
 android {
     compileSdkVersion safeExtGet('compileSdkVersion', 27)
+    buildToolsVersion safeExtGet('buildToolsVersion', '28.0.3')
     // buildToolsVersion safeExtGet('buildToolsVersion', '27.0.3')
 
     defaultConfig {
