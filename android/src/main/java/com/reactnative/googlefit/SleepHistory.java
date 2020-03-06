@@ -64,7 +64,7 @@ public class SleepHistory {
         List<Session> sessions = sessionReadResult.getSessions();
         for (Session session : sessions) {
 
-           if(session.getActivity().equals(FitnessActivities.SLEEP)) {
+           if(session.getActivity().equals(FitnessActivities.SLEEP)) {
 
             long start = session.getStartTime(TimeUnit.MILLISECONDS);
             long end = session.getEndTime(TimeUnit.MILLISECONDS);
